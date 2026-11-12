@@ -166,7 +166,7 @@ function render() {
   $("followName").textContent = "@" + gateCfg.followHandle;
   $("followLink").href = "https://x.com/" + gateCfg.followHandle;
   $("quoteLink").href = "https://x.com/intent/tweet?url=" + encodeURIComponent(gateCfg.officialPost.url);
-  $("wlCount").textContent = gateCfg.waitlistCount ? gateCfg.waitlistCount + " already filed." : "";
+  $("wlCount").textContent = (gateCfg.waitlistCount || 0).toLocaleString("en-US") + " of 2,000 free spots already filed.";
   const code = account ? account.toLowerCase().slice(-6) : "{code}";
   $("templateText").textContent = TEMPLATE_TEXT.replace("{code}", code);
   $("postLink").href = "https://x.com/intent/tweet?text=" + encodeURIComponent($("templateText").textContent);
