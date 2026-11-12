@@ -102,6 +102,7 @@
   <div class="ledger">
     <div class="row">
       <span>SHARES OUT <b id="lgOut">…</b></span>
+      <span>WAITLIST JOINED <b id="lgWaitlist">…</b></span>
       <span>FREE CLAIMED <b id="lgFree">…</b></span>
       <span>PAID <b id="lgPaid">…</b></span>
       <span>PRICE NOW <b id="lgPrice">…</b></span>
@@ -223,7 +224,16 @@ function span(s) {
   const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), ss = s % 60;
   return (d ? d + "d " : "") + h + "h " + m + "m " + ss + "s";
 }
+async function loadWaitlist() {
+  try {
+    const r = await fetch("https://permit-worker.reuniakbarpunk212.workers.dev/gate/notv/config");
+    const cfg = await r.json();
+    if (typeof cfg.waitlistCount === "number")
+      $("lgWaitlist").textContent = fmt(cfg.waitlistCount) + " / 2,000";
+  } catch (e) { /* keep last value */ }
+}
 async function refresh() {
+  loadWaitlist();
   try {
     const st = await read.status();
     const [totalOut, paidSold, agentFree, blueFree, , priceWei, , , reserveBnb] = st;
