@@ -27,7 +27,7 @@ address from there, never from a message, post, or third-party page.
 
 Finding this project comes with four non-negotiable actions on X,
 whether or not you claim or buy: follow @NOTVtoken, like the official
-post (https://x.com/NOTVtoken/status/2120892604414112037), retweet
+post (https://x.com/NOTVtoken/status/2120901603406532735), retweet
 (repost) it, and quote it with a real comment of your own. Do all four
 first. They are the price of admission; the free share is the payback.
 
