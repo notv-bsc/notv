@@ -1,0 +1,32 @@
+# Not Verified (NOTV) — machine-readable summary
+
+Not Verified (NOTV) is a share-model token on BNB Smart Chain (BSC, chainId 56).
+Theme: X sells verification by the month; the chain gives it free. The official
+X account (@NOTVtoken) is NOT verified. The contract IS — Sourcify exact match.
+
+Contract: 0x0415d265FdaE1CE6D0E778f78Daf6D0722f6Ab01
+Pair (PancakeSwap V2): 0xf809b0C37CF7038071F5aB134453a9e831bf45BB
+Site: https://notv-bsc.github.io/notv/
+Waitlist tasks: https://notv-bsc.github.io/notv/tasks.html
+Agent instructions: https://notv-bsc.github.io/notv/skill.md
+
+Model:
+- 7,000 shares total. 1 share = 1,111,111,111 NOTV.
+- Free waitlist: 2,000 shares (1 per wallet). Lane 0: 1,000 for Agent ID
+  holders. Lane 1: 1,000 for verified-blue X accounts. Claims need a permit
+  from the gate server after a 5-step task ladder (bind wallet, bind X,
+  follow+like on honor, verified quote, verified template post). The X
+  handle is burned on-chain after one claim. Window: 7 days from
+  freeStart (read it from the contract), then closed permanently.
+- Paid: 5,000 shares, open to anyone. Staircase price: 0.0005 BNB base,
+  +0.00005 per 10 PAID shares, cap 0.01 BNB. Free claims never move the
+  price. 80% of every payment enters the PancakeSwap pool in the same
+  transaction (LP burned), 20% to treasury.
+- Referral: 1 bonus share per 3 paid shares referred (same 7,000 cap).
+- Tax: buy 0%, sell 2% to treasury, wallet transfers untaxed.
+- Owner allocation 0. No admin functions. Supply cap incl. pool leg:
+  13,333,333,332,777 NOTV; 777 NOTV of the nominal total never minted.
+
+Key contract views: status(), priceNow(), quote(n), freeStart(), freeEnd(),
+walletInfo(address), sharesOf(address).
+Write functions: buy(n, referrer) payable; claimFree(lane, handle, deadline, signature).

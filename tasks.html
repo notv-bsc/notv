@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Not Verified (NOTV) — Waitlist Paperwork</title>
+<style>
+  :root { --paper:#f6f1e3; --paper2:#efe8d3; --ink:#1c1811; --mut:#6f6752; --line:#cfc5a4;
+          --red:#b3352b; --ok:#2e7d4f; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#e9e2cb; color:var(--ink); font-family: Georgia, 'Times New Roman', serif; }
+  main { max-width:700px; margin:0 auto; padding:28px 16px 70px; }
+  .form { background:var(--paper); border:2px solid var(--ink); padding:30px 34px 36px; box-shadow:6px 6px 0 rgba(28,24,17,.18); }
+  .dept { text-align:center; border-bottom:3px double var(--ink); padding-bottom:12px; margin-bottom:8px; }
+  .dept .l1 { font-family: ui-monospace, Menlo, monospace; font-size:11px; letter-spacing:.28em; color:var(--mut); }
+  .dept h1 { margin:6px 0 2px; font-size:27px; }
+  .dept .l3 { font-size:13px; font-style:italic; color:var(--mut); }
+  .step { border:1.5px solid var(--ink); padding:16px 18px; margin:0 0 14px; background:#fffdf4; }
+  .step.locked { opacity:.45; } .step.done { border-color:var(--ok); background:#f2f7ec; }
+  .step h3 { margin:0 0 6px; font-size:17px; }
+  .step p { margin:0 0 10px; font-size:14px; line-height:1.5; }
+  .req { font-family: ui-monospace, Menlo, monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--red); }
+  .done-badge { color:var(--ok); font-size:13px; font-weight:700; font-family: ui-monospace, Menlo, monospace; }
+  button { font-family: ui-monospace, Menlo, monospace; background:var(--ink); color:var(--paper); border:0;
+           padding:10px 16px; font-size:13.5px; font-weight:700; cursor:pointer; margin:2px 4px 2px 0; }
+  button.ghost { background:transparent; color:var(--ink); border:1.5px solid var(--ink); }
+  button:disabled { opacity:.45; cursor:default; }
+  input[type=text] { width:100%; box-sizing:border-box; background:#fff; color:var(--ink); border:1.5px solid var(--ink);
+           padding:9px 12px; margin:0 0 10px; font-family: ui-monospace, Menlo, monospace; font-size:13.5px; }
+  pre { background:var(--paper2); border:1.5px dashed var(--ink); padding:12px; white-space:pre-wrap; word-break:break-word; font-size:13.5px; }
+  .msg { min-height:20px; font-size:13.5px; font-family: ui-monospace, Menlo, monospace; margin:12px 0; }
+  .err { color:var(--red); } .ok { color:var(--ok); }
+  a { color:var(--ink); text-decoration-color:var(--red); text-underline-offset:3px; }
+  #claimBox { display:none; border:2px solid var(--ok); background:#f2f7ec; padding:18px; text-align:center; }
+  .small { font-size:12.5px; color:var(--mut); line-height:1.5; }
+</style>
+</head>
+<body>
+<main>
+<div class="form">
+  <div class="dept">
+    <div class="l1">DEPARTMENT OF UNVERIFIED AFFAIRS · FORM NV-7777 · ANNEX B</div>
+    <h1 id="gateTitle">Not Verified — Waitlist Paperwork</h1>
+    <div class="l3">Five small forms stand between you and one free share (1,111,111,111 NOTV). <span id="wlCount"></span></div>
+  </div>
+  <p class="msg" id="msg"></p>
+
+  <div class="step" id="step-wallet">
+    <span class="req">Required · Step 1 of 5</span>
+    <h3>Bind your wallet</h3>
+    <p>Connect a wallet and sign to prove it is yours. If it holds an <b>Agent ID</b>, you qualify for the
+       agent lane. If not, the blue lane below may still have you. Every later step uses this address.</p>
+    <button id="btnConnect" type="button">Connect Wallet</button>
+    <button id="btnBindWallet" type="button" disabled>Sign &amp; Bind Wallet</button>
+    <span class="done-badge" id="done-wallet" hidden>✓ FILED</span>
+  </div>
+
+  <div class="step locked" id="step-x">
+    <span class="req">Required · Step 2 of 5</span>
+    <h3>Bind your X account</h3>
+    <p>Paste your X profile link. One wallet binds one X, and one X binds one wallet — the contract
+       later burns your handle so it can never claim twice.</p>
+    <input type="text" id="xInput" placeholder="https://x.com/yourhandle">
+    <button id="btnBindX" type="button" disabled>Sign &amp; Bind X</button>
+    <span class="done-badge" id="done-x" hidden>✓ FILED</span>
+  </div>
+
+  <div class="step locked" id="step-follow">
+    <span class="req">Required · Step 3 of 5 · Honor system</span>
+    <h3>Follow <span id="followName">@NOTVtoken</span> + like the official post</h3>
+    <p>Follow the official account and like its pinned post, then mark this step done. X charges money
+       to verify a follow — and spending money on X is the whole reason this token exists — so this
+       step runs on your honor.</p>
+    <a id="followLink" href="#" target="_blank" rel="noopener"><button class="ghost" type="button">Open on X</button></a>
+    <button id="btnFollow" type="button" disabled>I followed + liked — mark done</button>
+    <span class="done-badge" id="done-follow" hidden>✓ FILED</span>
+  </div>
+
+  <div class="step locked" id="step-quote">
+    <span class="req">Required · Step 4 of 5 · Verified</span>
+    <h3>Quote the official post</h3>
+    <p>Quote-repost the official post from your bound X account — say something, anything — then submit
+       your post link. Our server checks the author is really your bound account.</p>
+    <a id="quoteLink" href="#" target="_blank" rel="noopener"><button class="ghost" type="button">Quote the post</button></a>
+    <input type="text" id="quoteInput" placeholder="https://x.com/yourhandle/status/…">
+    <button id="btnQuote" type="button" disabled>Sign &amp; Verify Quote</button>
+    <span class="done-badge" id="done-quote" hidden>✓ FILED</span>
+  </div>
+
+  <div class="step locked" id="step-template">
+    <span class="req">Required · Step 5 of 5 · Verified</span>
+    <h3>Post the template</h3>
+    <p>Post this text exactly as shown (your personal code is already filled in), then submit your post link.</p>
+    <pre id="templateText">…</pre>
+    <button class="ghost" id="btnCopy" type="button">Copy template</button>
+    <a id="postLink" href="#" target="_blank" rel="noopener"><button class="ghost" type="button">Post on X</button></a>
+    <input type="text" id="templateInput" placeholder="https://x.com/yourhandle/status/…">
+    <button id="btnTemplate" type="button" disabled>Sign &amp; Verify Post</button>
+    <span class="done-badge" id="done-template" hidden>✓ FILED</span>
+  </div>
+
+  <div id="claimBox">
+    <h3 style="margin-top:0">🎉 Paperwork complete — position <span id="wlPos">—</span></h3>
+    <p id="laneInfo" style="font-size:14.5px"></p>
+    <button id="btnClaim" type="button">Sign &amp; Claim My Free Share</button>
+    <p class="small" id="claimNote">The claim is a normal on-chain transaction from your wallet (a little BNB for gas).
+       It only works inside the 7-day waitlist window.</p>
+  </div>
+  <p class="small" style="margin-top:16px">Back to <a href="index.html">the denial letter</a> · Stuck? The steps must be filed in order — the form insists.</p>
+</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+<script>
+"use strict";
+/* ================= NOTV LAUNCH CONFIG ================= */
+const WORKER_BASE = "https://permit-worker.reuniakbarpunk212.workers.dev";
+const PROJECT_SLUG = "notv";
+const CONTRACT = "0x0415d265FdaE1CE6D0E778f78Daf6D0722f6Ab01";
+const TEMPLATE_TEXT = "No blue check. No problem. The contract is verified — the account isn't. Joining the $NOTV waitlist. #NotVerified {code}";
+const WC_PROJECT_ID = "ff5985647ed78916bed0155d2ff84a1c";
+const CLAIM_ABI = [
+  "function claimFree(uint8 lane, string handle, uint256 deadline, bytes signature)",
+  "function walletInfo(address) view returns (uint256,bool,uint256,uint256)",
+  "function freeStart() view returns (uint256)", "function freeEnd() view returns (uint256)"
+];
+/* ======================================================= */
+
+const $ = (id) => document.getElementById(id);
+const msg = (t, cls) => { const m = $("msg"); m.textContent = t || ""; m.className = "msg " + (cls || ""); };
+const rpc = new ethers.JsonRpcProvider("https://bsc-dataseed.binance.org");
+const readC = new ethers.Contract(CONTRACT, CLAIM_ABI, rpc);
+let provider = null, account = null, gateCfg = null, status = null, claimedOnChain = false;
+
+function signText(action, extra) {
+  let t = `TaskGate ${action}\nproject: ${PROJECT_SLUG}\nwallet: ${account.toLowerCase()}`;
+  if (extra) t += "\n" + extra;
+  return t;
+}
+async function sign(action, extra) {
+  return provider.request({ method: "personal_sign", params: [signText(action, extra), account] });
+}
+async function api(path, opts) {
+  const res = await fetch(`${WORKER_BASE}/gate/${PROJECT_SLUG}/${path}`, opts);
+  const j = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(j.error || ("HTTP " + res.status));
+  return j;
+}
+async function post(action, payload, extra) {
+  const signature = await sign(action, extra);
+  return api(action, { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ wallet: account, signature, ...payload }) });
+}
+function parseHandle(raw) {
+  const s = String(raw || "").trim();
+  const m = s.match(/(?:x\.com|twitter\.com)\/@?([A-Za-z0-9_]{1,15})\/?(?:[?#].*)?$/i) || s.match(/^@?([A-Za-z0-9_]{1,15})$/);
+  return m ? m[1].toLowerCase() : null;
+}
+function parsePostId(raw) {
+  const m = String(raw || "").match(/\/status\/(\d+)/);
+  return m ? m[1] : null;
+}
+
+function render() {
+  if (!gateCfg) return;
+  $("followName").textContent = "@" + gateCfg.followHandle;
+  $("followLink").href = "https://x.com/" + gateCfg.followHandle;
+  $("quoteLink").href = "https://x.com/intent/tweet?url=" + encodeURIComponent(gateCfg.officialPost.url);
+  $("wlCount").textContent = gateCfg.waitlistCount ? gateCfg.waitlistCount + " already filed." : "";
+  const code = account ? account.toLowerCase().slice(-6) : "{code}";
+  $("templateText").textContent = TEMPLATE_TEXT.replace("{code}", code);
+  $("postLink").href = "https://x.com/intent/tweet?text=" + encodeURIComponent($("templateText").textContent);
+  const st = (status && status.steps) || {};
+  const order = ["wallet", "x", "follow", "quote", "template"];
+  let prevDone = true;
+  for (const s of order) {
+    const box = $("step-" + s);
+    box.classList.toggle("done", !!st[s]);
+    box.classList.toggle("locked", !prevDone && !st[s]);
+    $("done-" + s).hidden = !st[s];
+    prevDone = prevDone && !!st[s];
+  }
+  $("btnBindWallet").disabled = !account || !!st.wallet;
+  $("btnBindX").disabled = !account || !st.wallet || !!st.x;
+  $("btnFollow").disabled = !account || !st.x || !!st.follow;
+  $("btnQuote").disabled = !account || !st.follow || !!st.quote;
+  $("btnTemplate").disabled = !account || !st.quote || !!st.template;
+  if (status && status.waitlist) {
+    $("claimBox").style.display = "block";
+    $("wlPos").textContent = "#" + status.waitlist.position;
+    if (claimedOnChain) {
+      $("laneInfo").textContent = "Your free share is already claimed and sitting in this wallet. Denied badge, delivered tokens.";
+      $("btnClaim").disabled = true; $("btnClaim").textContent = "Free Share Claimed ✓";
+    } else if (status.agent) {
+      $("laneInfo").textContent = "Your lane: Agent ID (this wallet holds one). One free share is reserved for your signature below.";
+      $("btnClaim").disabled = !account;
+    } else if (status.blue) {
+      $("laneInfo").textContent = "Your lane: verified-blue X (@" + (status.handle || "") + "). One free share is reserved for your signature below.";
+      $("btnClaim").disabled = !account;
+    } else {
+      $("laneInfo").textContent = "Heads-up: this wallet holds no Agent ID and the bound X account is not verified-blue, so the free share cannot be issued. You can still buy shares on the main page.";
+      $("btnClaim").disabled = true;
+    }
+  }
+}
+async function refresh() {
+  gateCfg = await api("config");
+  if (account) {
+    status = await api("status?wallet=" + account);
+    try { const wi = await readC.walletInfo(account); claimedOnChain = !!wi[1]; } catch (e) {}
+  }
+  render();
+}
+
+async function loadWC() {
+  if (window["@walletconnect/ethereum-provider"]) return window["@walletconnect/ethereum-provider"].EthereumProvider;
+  for (const src of ["https://unpkg.com/@walletconnect/ethereum-provider@2.21.0/dist/index.umd.js",
+                     "https://cdn.jsdelivr.net/npm/@walletconnect/ethereum-provider@2.21.0/dist/index.umd.js"]) {
+    try {
+      await new Promise((ok, bad) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = bad; document.head.appendChild(s); });
+      if (window["@walletconnect/ethereum-provider"]) return window["@walletconnect/ethereum-provider"].EthereumProvider;
+    } catch (e) { /* try next CDN */ }
+  }
+  throw new Error("WalletConnect failed to load");
+}
+
+$("btnConnect").onclick = async () => {
+  try {
+    msg("Opening wallet…");
+    if (window.ethereum) {
+      provider = window.ethereum;
+      const accs = await provider.request({ method: "eth_requestAccounts" });
+      account = accs[0];
+    } else {
+      const EP = await loadWC();
+      const wc = await EP.init({ projectId: WC_PROJECT_ID, chains: [56], showQrModal: true,
+        metadata: { name: "Not Verified (NOTV)", description: "Waitlist paperwork", url: location.origin, icons: [] } });
+      await wc.connect();
+      provider = wc;
+      const accs = await wc.request({ method: "eth_accounts" });
+      account = accs[0];
+    }
+    $("btnConnect").textContent = "Connected: " + account.slice(0, 6) + "…" + account.slice(-4);
+    msg("Connected: " + account, "ok");
+    await refresh();
+  } catch (e) { msg(e.message || String(e), "err"); }
+};
+$("btnBindWallet").onclick = async () => {
+  try { status = await post("bind-wallet", {}); msg("Wallet bound and filed.", "ok"); await refresh(); }
+  catch (e) { msg(e.message || String(e), "err"); }
+};
+$("btnBindX").onclick = async () => {
+  try {
+    const handle = parseHandle($("xInput").value);
+    if (!handle) { msg("That X profile link could not be parsed.", "err"); return; }
+    status = await post("bind-x", { x: $("xInput").value }, `x: ${handle}`);
+    msg("X account bound: @" + handle, "ok"); await refresh();
+  } catch (e) { msg(e.message || String(e), "err"); }
+};
+$("btnFollow").onclick = async () => {
+  try { status = await post("follow", {}); msg("Follow + like filed on your honor.", "ok"); await refresh(); }
+  catch (e) { msg(e.message || String(e), "err"); }
+};
+$("btnQuote").onclick = async () => {
+  try {
+    const id = parsePostId($("quoteInput").value);
+    if (!id) { msg("Paste the full link of your quote post.", "err"); return; }
+    status = await post("quote", { postUrl: $("quoteInput").value }, `post: ${id}`);
+    msg("Quote verified and filed.", "ok"); await refresh();
+  } catch (e) { msg(e.message || String(e), "err"); }
+};
+$("btnCopy").onclick = () => { navigator.clipboard.writeText($("templateText").textContent); msg("Template copied.", "ok"); };
+$("btnTemplate").onclick = async () => {
+  try {
+    const id = parsePostId($("templateInput").value);
+    if (!id) { msg("Paste the full link of your post.", "err"); return; }
+    status = await post("template", { postUrl: $("templateInput").value }, `post: ${id}`);
+    msg("Template post verified — paperwork complete!", "ok"); await refresh();
+  } catch (e) { msg(e.message || String(e), "err"); }
+};
+$("btnClaim").onclick = async () => {
+  try {
+    msg("Requesting your claim permit…");
+    const permit = await post("claim-permit", {});
+    const bp = new ethers.BrowserProvider(provider);
+    const net = await bp.getNetwork();
+    if (Number(net.chainId) !== 56) { msg("Switch your wallet to BNB Smart Chain (56), then claim again.", "err"); return; }
+    const signer = await bp.getSigner();
+    const c = new ethers.Contract(CONTRACT, CLAIM_ABI, signer);
+    msg("Permit issued for the " + (permit.lane === 0 ? "Agent ID" : "blue-check") + " lane. Confirm the claim in your wallet…");
+    const tx = await c.claimFree(permit.lane, permit.handle, BigInt(permit.deadline), permit.signature);
+    msg("Broadcast: " + tx.hash.slice(0, 18) + "…");
+    await tx.wait();
+    claimedOnChain = true;
+    msg("Filed forever: 1,111,111,111 NOTV are in your wallet. The badge is still denied. The tokens are not.", "ok");
+    render();
+  } catch (e) { msg((e && (e.shortMessage || e.message)) || String(e), "err"); }
+};
+
+refresh().catch((e) => msg(e.message || String(e), "err"));
+</script>
+</body>
+</html>

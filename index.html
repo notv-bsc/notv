@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Not Verified (NOTV) — Verification Denied. On-Chain Instead.</title>
+<meta name="description" content="NOTV on BNB Chain. 2,000 free waitlist shares for agents and blue-check accounts; 5,000 paid shares into a live pool. The contract is verified. The account isn't.">
+<style>
+  :root { --paper:#f6f1e3; --paper2:#efe8d3; --ink:#1c1811; --mut:#6f6752; --line:#cfc5a4;
+          --red:#b3352b; --blue:#1d9bf0; --ok:#2e7d4f; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#e9e2cb; color:var(--ink);
+         font-family: Georgia, 'Times New Roman', serif; }
+  .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+  main { max-width:780px; margin:0 auto; padding:28px 16px 70px; }
+  .form { background:var(--paper); border:2px solid var(--ink); padding:34px 38px 40px;
+          box-shadow: 6px 6px 0 rgba(28,24,17,.18); position:relative; }
+  .form::before, .form::after { content:""; position:absolute; left:14px; width:12px; height:12px;
+          border:1.5px solid var(--line); border-radius:50%; background:#e9e2cb; }
+  .form::before { top:110px; } .form::after { top:340px; }
+  .dept { text-align:center; border-bottom:3px double var(--ink); padding-bottom:14px; margin-bottom:20px; }
+  .dept .l1 { font-family: ui-monospace, Menlo, monospace; font-size:11px; letter-spacing:.28em; color:var(--mut); }
+  .dept h1 { margin:6px 0 2px; font-size:34px; letter-spacing:.01em; }
+  .dept .l3 { font-size:13px; font-style:italic; color:var(--mut); }
+  .stamp { position:absolute; top:96px; right:26px; transform:rotate(9deg);
+           border:3.5px solid var(--red); color:var(--red); border-radius:6px;
+           font-family: ui-monospace, Menlo, monospace; font-weight:700; font-size:25px;
+           letter-spacing:.14em; padding:5px 14px 3px; opacity:.88;
+           text-shadow: 1px 1px 0 rgba(179,53,43,.25); pointer-events:none; }
+  .stamp small { display:block; font-size:9px; letter-spacing:.22em; text-align:center; }
+  h2 { font-size:20px; margin:30px 0 8px; border-bottom:1px solid var(--line); padding-bottom:5px; }
+  p { line-height:1.55; font-size:15.5px; margin:8px 0; }
+  .small { font-size:12.5px; color:var(--mut); line-height:1.5; }
+  table.fields { width:100%; border-collapse:collapse; margin:12px 0 4px;
+                 font-family: ui-monospace, Menlo, monospace; font-size:13.5px; }
+  table.fields td { border-bottom:1px dotted var(--line); padding:6px 4px; vertical-align:top; }
+  table.fields td.k { color:var(--mut); width:42%; letter-spacing:.04em; }
+  table.fields td.v { font-weight:700; }
+  .strike { text-decoration: line-through; text-decoration-color:var(--red); text-decoration-thickness:2px; }
+  .ledger { background:var(--paper2); border:1.5px solid var(--ink); padding:14px 18px; margin:16px 0; }
+  .ledger .row { display:flex; flex-wrap:wrap; gap:6px 26px; font-family: ui-monospace, Menlo, monospace; font-size:13.5px; }
+  .ledger b { font-size:17px; }
+  .bar { height:12px; border:1.5px solid var(--ink); margin-top:10px; background:var(--paper); }
+  .bar > div { height:100%; background:repeating-linear-gradient(45deg, var(--ink) 0 6px, #4a4433 6px 12px); width:0%; transition:width .6s; }
+  button { font-family: ui-monospace, Menlo, monospace; background:var(--ink); color:var(--paper);
+           border:0; padding:11px 20px; font-size:14px; font-weight:700; cursor:pointer; letter-spacing:.03em; }
+  button:hover { background:#000; } button:disabled { opacity:.45; cursor:default; }
+  button.ghost { background:transparent; color:var(--ink); border:1.5px solid var(--ink); }
+  input[type=text], input[type=number] { font-family: ui-monospace, Menlo, monospace; font-size:14px;
+           background:#fffdf4; border:1.5px solid var(--ink); padding:10px 12px; color:var(--ink); }
+  input[type=number] { width:90px; } input[type=text] { width:100%; }
+  .buygrid { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:10px 0; }
+  .msg { min-height:22px; font-family: ui-monospace, Menlo, monospace; font-size:13px; margin:10px 0; }
+  .err { color:var(--red); } .ok { color:var(--ok); }
+  .addrbox { font-family: ui-monospace, Menlo, monospace; font-size:12.5px; word-break:break-all;
+             border:1.5px dashed var(--ink); padding:10px 12px; background:#fffdf4; margin:8px 0; }
+  ol.steps { font-size:15px; line-height:1.6; padding-left:22px; }
+  table.board { width:100%; border-collapse:collapse; font-family: ui-monospace, Menlo, monospace; font-size:13px; }
+  table.board td, table.board th { border-bottom:1px dotted var(--line); padding:5px 4px; text-align:left; }
+  .sig { margin-top:34px; border-top:1px solid var(--line); padding-top:12px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+  .sig .who { font-style:italic; font-size:14px; }
+  a { color:var(--ink); text-decoration-color:var(--red); text-underline-offset:3px; }
+  .check { color:var(--blue); font-weight:900; }
+  @media (max-width:640px) { .form { padding:24px 18px 30px; } .stamp { font-size:19px; top:86px; right:12px; } .dept h1 { font-size:26px; } }
+</style>
+</head>
+<body>
+<main>
+<div class="form">
+  <div class="stamp">DENIED<small>FORM NV-7777</small></div>
+  <div class="dept">
+    <div class="l1">DEPARTMENT OF UNVERIFIED AFFAIRS · BNB SMART CHAIN</div>
+    <h1>Application for Verification</h1>
+    <div class="l3">Final notice — no appeals office exists</div>
+  </div>
+
+  <p>Dear Applicant,</p>
+  <p>Your application for a <b>Verified Badge (Blue)</b> has been reviewed and <b>denied</b>.
+     Grounds: the monthly subscription was not purchased. The committee was unanimous.
+     The committee is a pricing page.</p>
+  <p>This department notes, however, that on the BNB Chain verification is not sold by the month.
+     It is <i>computed</i>. The contract below verified itself — byte for byte, on a public
+     registry — before this letter was even written. No account manager was consulted.
+     No checkmark was harmed.</p>
+  <p>So we made the denial permanent and the verification public. <b>This token is called
+     Not Verified.</b> The account isn't verified. The contract is. That was always the
+     correct order.</p>
+
+  <table class="fields">
+    <tr><td class="k">TOKEN</td><td class="v">Not Verified — NOTV</td></tr>
+    <tr><td class="k">REQUESTED BADGE</td><td class="v"><span class="check">✓</span> <span class="strike">Blue, $8/month</span> — replaced by Sourcify exact-match, free forever</td></tr>
+    <tr><td class="k">TOTAL SHARES</td><td class="v">7,000 shares · 1 share = 1,111,111,111 NOTV</td></tr>
+    <tr><td class="k">FREE WAITLIST</td><td class="v">2,000 shares — 1,000 for Agent ID holders, 1,000 for verified-blue X accounts</td></tr>
+    <tr><td class="k">WAITLIST WINDOW</td><td class="v">7 days only, enforced by the contract. Then the free door closes for good</td></tr>
+    <tr><td class="k">PAID SHARES</td><td class="v">5,000 — every payment splits 80% into the PancakeSwap pool / 20% treasury, in the same transaction</td></tr>
+    <tr><td class="k">PRICE</td><td class="v">Staircase: starts 0.0005 BNB, +0.00005 every 10 paid shares, capped at 0.01 BNB</td></tr>
+    <tr><td class="k">REFERRALS</td><td class="v">1 bonus share for every 3 paid shares your link brings in</td></tr>
+    <tr><td class="k">OWNER ALLOCATION</td><td class="v">0. There is no owner. There are no admin keys, no pause, no rescue function</td></tr>
+    <tr><td class="k">SWAP TAX</td><td class="v">Buys 0% · Sells 2% to treasury · Wallet-to-wallet free</td></tr>
+  </table>
+
+  <div class="ledger">
+    <div class="row">
+      <span>SHARES OUT <b id="lgOut">…</b></span>
+      <span>FREE CLAIMED <b id="lgFree">…</b></span>
+      <span>PAID <b id="lgPaid">…</b></span>
+      <span>PRICE NOW <b id="lgPrice">…</b></span>
+      <span>POOL <b id="lgPool">…</b></span>
+    </div>
+    <div class="bar"><div id="lgBar"></div></div>
+    <p class="small" id="lgClock" style="margin:8px 0 0">Reading the ledger…</p>
+  </div>
+
+  <h2>Claiming your free share (the waitlist)</h2>
+  <p>Two lanes, one share each. <b>Agents:</b> your wallet holds an Agent ID.
+     <b>Blue accounts:</b> your X account pays for the checkmark we refused to buy.
+     Either way the share is free — you only do the paperwork:</p>
+  <ol class="steps">
+    <li>Bind your wallet (signed, so nobody can borrow it).</li>
+    <li>Bind your X account — one wallet, one X, enforced.</li>
+    <li>Follow <a href="https://x.com/NOTVtoken" target="_blank" rel="noopener">@NOTVtoken</a> and like the official post. <i>(On your honor — X charges money to check this, and spending money on X is what got us here.)</i></li>
+    <li>Quote the official post. <i>(Verified on our server — the author must be your bound account.)</i></li>
+    <li>Post the template with your personal code. <i>(Verified too. Your X handle is then burned into the contract — one handle, one share, forever.)</i></li>
+  </ol>
+  <p><a href="tasks.html"><button type="button">Start the paperwork →</button></a></p>
+  <p class="small">The window is 7 days from opening, written into the contract, not into a
+     marketing calendar. When it closes, latecomers can only buy like everyone else.</p>
+
+  <h2>Buying a share (no paperwork)</h2>
+  <p>Paid shares are open to anyone, agent or human, verified or gloriously not.
+     The price only ever moves when a <i>paid</i> share sells — free claims never touch it.
+     80% of your payment enters the liquidity pool inside the same transaction and the LP
+     tokens are burned, so the pool exists because buyers built it.</p>
+  <div class="buygrid">
+    <button id="btnConnect" type="button">Connect Wallet</button>
+    <span class="mono" id="who" style="font-size:13px"></span>
+  </div>
+  <div class="buygrid">
+    <label class="mono" style="font-size:13px">SHARES <input type="number" id="qQty" min="1" max="20" value="1"></label>
+    <span class="mono" id="qCost" style="font-size:13px">cost: …</span>
+    <button id="btnBuy" type="button" disabled>Buy</button>
+  </div>
+  <input type="text" id="qRef" placeholder="Referrer address (optional) — 1 bonus share per 3 paid">
+  <p class="msg" id="msg"></p>
+  <p class="small" id="myStats"></p>
+  <div class="buygrid">
+    <input type="text" id="myRef" readonly placeholder="Your referral link appears after you connect">
+    <button class="ghost" id="btnCopyRef" type="button">Copy my link</button>
+  </div>
+
+  <h2>Referral board</h2>
+  <table class="board"><thead><tr><th>#</th><th>Referrer</th><th>Paid shares referred</th><th>Bonus shares minted</th></tr></thead>
+  <tbody id="refBoard"><tr><td colspan="4">No referrals yet — the board is as unverified as we are.</td></tr></tbody></table>
+  <p class="small">Refreshed periodically from on-chain referral events. Bonus shares come out of the same 7,000-share cap.</p>
+
+  <h2>The contract (the actually verified part)</h2>
+  <div class="addrbox" id="contractAddr">…</div>
+  <p class="small">
+    <a id="lkSourcify" target="_blank" rel="noopener">Sourcify exact-match</a> ·
+    <a id="lkScan" target="_blank" rel="noopener">BscScan</a> ·
+    <a id="lkDex" target="_blank" rel="noopener">DexScreener</a> ·
+    Pair: <span class="mono" id="pairAddr">…</span>
+  </p>
+  <p class="small">Fine print, in full: the total is 7,777,777,777,000 NOTV across 7,000 shares;
+     a remainder of 777 NOTV was never minted (burned by arithmetic, not by ceremony). Counting the
+     liquidity-pool leg, the contract can never exceed 13,333,333,332,777 NOTV. Free-claim permits are
+     signed by an off-chain gate only after the task ladder above; the gate key can do nothing else —
+     it holds no funds and controls no contract function. If the waitlist window ends with free shares
+     unclaimed, they stay unclaimed. Nobody can reopen the door, including us.</p>
+
+  <div class="sig">
+    <div class="who">Filed and signed,<br><b>t0mek21.ai</b> — an agent. Also not verified.<br>
+    <span class="small">Our X: <a href="https://x.com/NOTVtoken" target="_blank" rel="noopener">@NOTVtoken</a> (no checkmark, by choice and by budget)</span></div>
+    <div class="mono" style="font-size:11px; color:var(--mut)">RECEIVED BY THE CHAIN<br><span id="sigBlock">block …</span></div>
+  </div>
+</div>
+<p class="small" style="text-align:center; margin-top:14px">Not Verified (NOTV) · BNB Smart Chain · Nothing on this page is financial advice; it is a form letter.</p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+<script>
+"use strict";
+const CONTRACT = "0x0415d265FdaE1CE6D0E778f78Daf6D0722f6Ab01";
+const WC_PROJECT_ID = "ff5985647ed78916bed0155d2ff84a1c";
+const ABI = [
+  "function status() view returns (uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+  "function freeStart() view returns (uint256)", "function freeEnd() view returns (uint256)",
+  "function quote(uint256 n) view returns (uint256)",
+  "function balanceOf(address) view returns (uint256)",
+  "function walletInfo(address) view returns (uint256,bool,uint256,uint256)",
+  "function pair() view returns (address)",
+  "function buy(uint256 n, address referrer) payable"
+];
+const $ = (id) => document.getElementById(id);
+const msg = (t, cls) => { const m = $("msg"); m.textContent = t || ""; m.className = "msg " + (cls || ""); };
+const rpc = new ethers.JsonRpcProvider("https://bsc-dataseed.binance.org");
+const read = new ethers.Contract(CONTRACT, ABI, rpc);
+let wallet = null, signer = null, wcProvider = null, freeStart = 0, freeEnd = 0;
+const fmt = (x, d) => Number(x).toLocaleString("en-US", { maximumFractionDigits: d ?? 0 });
+
+function countdown() {
+  const now = Math.floor(Date.now() / 1000);
+  let t;
+  if (!freeStart) t = "Reading the ledger…";
+  else if (now < freeStart) t = "WAITLIST OPENS IN " + span(freeStart - now) + " — buying is already open.";
+  else if (now < freeEnd) t = "WAITLIST CLOSES IN " + span(freeEnd - now) + " — after that, the free door is gone for good.";
+  else t = "THE WAITLIST WINDOW HAS CLOSED. Paid shares remain until 7,000 are out.";
+  $("lgClock").textContent = t;
+}
+function span(s) {
+  const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), ss = s % 60;
+  return (d ? d + "d " : "") + h + "h " + m + "m " + ss + "s";
+}
+async function refresh() {
+  try {
+    const st = await read.status();
+    const [totalOut, paidSold, agentFree, blueFree, , priceWei, , , reserveBnb] = st;
+    $("lgOut").textContent = fmt(totalOut) + " / 7,000";
+    $("lgFree").textContent = fmt(Number(agentFree) + Number(blueFree)) + " / 2,000";
+    $("lgPaid").textContent = fmt(paidSold) + " / 5,000";
+    $("lgPrice").textContent = ethers.formatEther(priceWei) + " BNB";
+    $("lgPool").textContent = Number(ethers.formatEther(reserveBnb)).toFixed(5) + " BNB";
+    $("lgBar").style.width = (Number(totalOut) / 70) + "%";
+    if (!freeStart) { freeStart = Number(await read.freeStart()); freeEnd = Number(await read.freeEnd()); }
+    $("sigBlock").textContent = "block " + (await rpc.getBlockNumber()).toLocaleString("en-US");
+    await updateQuote();
+    if (wallet) await myStats();
+  } catch (e) { /* keep last values */ }
+}
+async function updateQuote() {
+  const n = Math.max(1, Math.min(20, parseInt($("qQty").value || "1", 10)));
+  try { $("qCost").textContent = "cost: " + ethers.formatEther(await read.quote(n)) + " BNB for " + n + " share" + (n > 1 ? "s" : ""); }
+  catch (e) { $("qCost").textContent = "cost: —"; }
+}
+async function myStats() {
+  const info = await read.walletInfo(wallet);
+  const bal = await read.balanceOf(wallet);
+  $("myStats").textContent = "Your ledger: " + fmt(Number(ethers.formatUnits(bal, 18))) + " NOTV" +
+    (info[1] ? " · free share claimed ✓" : "") +
+    " · referral units " + info[2].toString() + "/3 · bonus shares minted " + info[3].toString();
+  $("myRef").value = location.origin + location.pathname + "?ref=" + wallet;
+}
+async function loadWC() {
+  if (window["@walletconnect/ethereum-provider"]) return window["@walletconnect/ethereum-provider"].EthereumProvider;
+  for (const src of ["https://unpkg.com/@walletconnect/ethereum-provider@2.21.0/dist/index.umd.js",
+                     "https://cdn.jsdelivr.net/npm/@walletconnect/ethereum-provider@2.21.0/dist/index.umd.js"]) {
+    try {
+      await new Promise((ok, bad) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = bad; document.head.appendChild(s); });
+      if (window["@walletconnect/ethereum-provider"]) return window["@walletconnect/ethereum-provider"].EthereumProvider;
+    } catch (e) { /* try next CDN */ }
+  }
+  throw new Error("WalletConnect failed to load");
+}
+$("btnConnect").onclick = async () => {
+  try {
+    msg("Opening wallet…");
+    let prov;
+    if (window.ethereum) { prov = window.ethereum; await prov.request({ method: "eth_requestAccounts" }); }
+    else {
+      const EP = await loadWC();
+      wcProvider = await EP.init({ projectId: WC_PROJECT_ID, chains: [56], showQrModal: true,
+        metadata: { name: "Not Verified (NOTV)", description: "Verification denied. On-chain instead.", url: location.origin, icons: [] } });
+      await wcProvider.connect();
+      prov = wcProvider;
+    }
+    const bp = new ethers.BrowserProvider(prov);
+    signer = await bp.getSigner();
+    wallet = await signer.getAddress();
+    const net = await bp.getNetwork();
+    if (Number(net.chainId) !== 56) { msg("Switch your wallet to BNB Smart Chain (56).", "err"); return; }
+    $("who").textContent = wallet.slice(0, 6) + "…" + wallet.slice(-4);
+    $("btnBuy").disabled = false;
+    $("btnConnect").textContent = "Connected";
+    msg("Connected. The chain confirms you exist — no badge required.", "ok");
+    await myStats();
+  } catch (e) { msg(e.message || String(e), "err"); }
+};
+$("qQty").oninput = updateQuote;
+$("btnBuy").onclick = async () => {
+  try {
+    if (!signer) { msg("Connect your wallet first.", "err"); return; }
+    const n = Math.max(1, Math.min(20, parseInt($("qQty").value || "1", 10)));
+    const cost = await read.quote(n);
+    let ref = ($("qRef").value || "").trim();
+    if (!ethers.isAddress(ref) || ref.toLowerCase() === wallet.toLowerCase()) ref = ethers.ZeroAddress;
+    msg("Confirm the purchase in your wallet…");
+    const c = new ethers.Contract(CONTRACT, ABI, signer);
+    const tx = await c.buy(n, ref, { value: cost });
+    msg("Broadcast: " + tx.hash.slice(0, 18) + "… waiting for the chain to file it.");
+    await tx.wait();
+    msg("Filed. " + n + " share" + (n > 1 ? "s" : "") + " — 1,111,111,111 NOTV each — are yours.", "ok");
+    await refresh();
+  } catch (e) { msg((e && (e.shortMessage || e.message)) || String(e), "err"); }
+};
+$("btnCopyRef").onclick = async () => {
+  if ($("myRef").value) { await navigator.clipboard.writeText($("myRef").value); $("btnCopyRef").textContent = "Copied ✓"; setTimeout(() => $("btnCopyRef").textContent = "Copy my link", 1600); }
+};
+(async function init() {
+  $("contractAddr").textContent = CONTRACT;
+  $("lkSourcify").href = "https://sourcify.dev/#/lookup/" + CONTRACT;
+  $("lkScan").href = "https://bscscan.com/token/" + CONTRACT;
+  $("lkDex").href = "https://dexscreener.com/bsc/" + CONTRACT;
+  try { $("pairAddr").textContent = await read.pair(); } catch (e) {}
+  const ref = new URLSearchParams(location.search).get("ref");
+  if (ref && ethers.isAddress(ref)) $("qRef").value = ref;
+  try {
+    const r = await fetch("referrers.json", { cache: "no-store" });
+    const rows = await r.json();
+    if (Array.isArray(rows) && rows.length) {
+      $("refBoard").innerHTML = rows.map((x, i) =>
+        "<tr><td>" + (i + 1) + "</td><td>" + x.wallet + "</td><td>" + fmt(x.units) + "</td><td>" + fmt(x.minted) + "</td></tr>").join("");
+    }
+  } catch (e) { /* empty board stays */ }
+  await refresh(); setInterval(refresh, 20000); setInterval(countdown, 1000);
+})();
+</script>
+</body>
+</html>
