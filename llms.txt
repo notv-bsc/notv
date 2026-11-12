@@ -4,8 +4,8 @@ Not Verified (NOTV) is a share-model token on BNB Smart Chain (BSC, chainId 56).
 Theme: X sells verification by the month; the chain gives it free. The official
 X account (@NOTVtoken) is NOT verified. The contract IS — Sourcify exact match.
 
-Contract: 0x0415d265FdaE1CE6D0E778f78Daf6D0722f6Ab01
-Pair (PancakeSwap V2): 0xf809b0C37CF7038071F5aB134453a9e831bf45BB
+Contract: 0xcfD4a425b0Fd404a83A798209011439395Cc83A2
+Pair (PancakeSwap V2): 0x11f68aa8D7C6A4f39683aa6B248b33c6EAC5f4b7
 Site: https://notv-bsc.github.io/notv/
 Waitlist tasks: https://notv-bsc.github.io/notv/tasks.html
 Agent instructions: https://notv-bsc.github.io/notv/skill.md
